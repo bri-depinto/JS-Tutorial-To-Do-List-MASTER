@@ -12,8 +12,28 @@ const UNCHECK = "fa-circle-thin";
 const LINE_THROUGH = "lineThrough";
 
 // variables
-let LIST = [],
- id = 0;
+let LIST, id;
+
+//get item from localstorage
+let data = localStorage.getItem("TODO");
+
+//check if data is not empty
+if(data){
+    LIST = JSON.parse(data);
+    id = LIST.length; //set the id to the last one in the list
+    loadlist(LIST); //load the list to the user interface
+}else{
+    //if data isnt empty
+    LIST = [];
+    id = 0;
+}
+// load items to the user's interface
+function loadList(array){
+    array.forEach(function(item){
+addToDo(item.name, item.id, item.done, item.trash);
+    })
+}
+
 
 //show todays date
 const options = {weekday : "long", month:"short", day:"numeric"};
@@ -55,6 +75,9 @@ if(event.keyCode === 13){
             trash : false
         });
 
+//add item to localstorage
+localStorage.setItem("TODO", JSON.stringify(LIST));
+
         id++;
     }
     input.value = "";
@@ -78,4 +101,6 @@ list.addEventListener("click", function(event){
     }else if(elementJob == "delete"){
         removeToDo(element);
     }
+    //add item to localstorage
+localStorage.setItem("TODO", JSON.stringify(LIST));
 });
